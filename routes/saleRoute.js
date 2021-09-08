@@ -4,22 +4,22 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  getAll,
   createController,
-  findById,
-  updateById,
-  deleteById
+  // getAll,
+  // findById,
+  // updateById,
+  // deleteById
 } = require('../controllers/saleController');
-
-router.get('/', getAll);
 
 router.post('/', createController);
 
-router.get('/:id', findById);
+// router.get('/', getAll);
 
-router.put('/:id', updateById);
+// router.get('/:id', findById);
 
-router.delete('/:id', deleteById);
+// router.put('/:id', updateById);
+
+// router.delete('/:id', deleteById);
 
 
 

@@ -8,6 +8,8 @@ const isString = (value) => typeof value !== 'string';
 const isNumber = (value) => typeof value !== 'number';
 const isLengthLetterThan = (value, length) => value.length < length;
 const isLengthMoreThan = (value, length) => value < length;
+const isLengthEqualsTo = (value, length) => value === length;
+
 
 module.exports = {
   HTTP_OK_STATUS,
@@ -19,4 +21,5 @@ module.exports = {
   isNumber,
   isLengthLetterThan,
   isLengthMoreThan,
+  isLengthEqualsTo
 };

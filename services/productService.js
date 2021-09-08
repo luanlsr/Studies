@@ -26,12 +26,6 @@ const create = async (name, quantity) => {
   }
 
   switch (true) {
-  // case exists: return {
-  // error: {
-  //     code: 'alreadyExists',
-  //     message: 'Product already exists',
-  //   },
-  // };
   
   case isString(name): return {
     err: {
