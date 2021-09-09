@@ -7,8 +7,8 @@ const HTTP_NOT_FOUND_STATUS = 404;
 const isString = (value) => typeof value !== 'string';
 const isNumber = (value) => typeof value !== 'number';
 const isLengthLetterThan = (value, length) => value.length < length;
-const isLengthMoreThan = (value, length) => value < length;
-const isLengthEqualsTo = (value, length) => value === length;
+const isLessThan = (value, length) => value < length;
+const isEqualsTo = (value, length) => value === length;
 
 
 module.exports = {
@@ -20,6 +20,6 @@ module.exports = {
   isString,
   isNumber,
   isLengthLetterThan,
-  isLengthMoreThan,
-  isLengthEqualsTo
+  isLessThan,
+  isEqualsTo
 };

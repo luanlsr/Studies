@@ -1,38 +1,45 @@
 const connection = require('./connection');
 const {ObjectID} = require('mongodb');
 
-const create = async (arrayOfSales) => {
+const create = async (itensSold) => {
+  
   const sale = await connection()
     .then((db) => db.collection('sales').insertMany([{
-      productId,
-      quantity,
+      itensSold
     }]));
-  console.log(sale);
+  // console.log(sale);
+  // console.log(arrayOfSales);
+
   return {
     _id: Object.values(sale.insertedIds).toString(),
-    itensSold: [{
-      productId,
-      quantity,
-    }]
+    itensSold
   };
 };
 
-// const getAll = async () => {
-//   return connection()
-//     .then((db) => db.collection('sales').find().toArray())
-//     .then((result) => (result));
-// };
+const getAll = async () => {
+  const itensSold = connection()
+    .then((db) => db.collection('sales').find().toArray());
+  return itensSold
+  ;
+};
 
-// const findById = async (id) => {
-//   if (!ObjectID.isValid(id)) {
-//     return null;
-//   }
-//   const products = await connection()
-//     .then((db) => db.collection('sales').findOne({_id: ObjectID(id)}));
-//   // console.log(products);
-//   // .then((result) => result);
-//   return products;
-// };
+const findById = async (id) => {
+  if (!ObjectID.isValid(id)) {
+    return null;
+  }
+  const sales = await connection()
+    .then((db) => db.collection('sales').findOne({_id: ObjectID(id)}));
+
+  return sales;
+};
+
+const updateById = async (id, productId, quantity) => {
+  const db = await connection();
+  const sales = await db.collection('sales')
+    .updateOne({_id: ObjectID(id)}, {$set: {productId, quantity}});
+  const findOne = findById(id);
+  return findOne;
+};
 
 // const findByName = async (name) => {
 //   return connection()
@@ -42,12 +49,6 @@ const create = async (arrayOfSales) => {
 //       .then((result) => (result)));
 // };
 
-// const updateById = async (id, name, quantity) => {
-//   const db = await connection();
-//   const products = await db.collection('sales')
-//     .updateOne({_id: ObjectID(id)}, {$set: {name, quantity}});
-//   return products;
-// };
 
 // const deleteById = async (id) => {
 //   if (!ObjectID.isValid(id)) {
@@ -61,9 +62,9 @@ const create = async (arrayOfSales) => {
 
 module.exports = {
   create,
-  // updateById,
-  // getAll,
+  getAll,
+  findById,
   // findByName,
-  // findById,
+  updateById,
   // deleteById
 };

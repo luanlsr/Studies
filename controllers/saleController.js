@@ -4,6 +4,7 @@ const app = express();
 const {
   HTTP_OK_STATUS,
   HTTP_CREATED_STATUS,
+  HTTP_NOT_FOUND_STATUS,
   HTTP_NO_BODY_STATUS
 } = require('../helpers/helpers');
 
@@ -13,9 +14,9 @@ const service = require('../services/saleService');
 
 
 const createController = rescue(async (req, res) => {
-  const {productId, quantity} = req.body;
-  
-  const saleCreated = await service.create(productId, quantity);
+  const itensSold = req.body;
+  // console.log(req.body);
+  const saleCreated = await service.create(itensSold);
   if (saleCreated.err) return res.status(HTTP_NO_BODY_STATUS)
     .json(saleCreated);
 
@@ -23,29 +24,34 @@ const createController = rescue(async (req, res) => {
 });
 
 
-// const findById = rescue(async(req, res) => {
-//   const { id } = req.params;
+const getAll = rescue(async(_req, res) => {
+  const getAllSales = await service.getAll();
+  return res.status(HTTP_OK_STATUS).json({sales: getAllSales});
+});
 
-//   const getProductsById = await service.findById(id);
-//   if (getProductsById.err) return res.status(HTTP_NO_BODY_STATUS)
-//     .json(getProductsById);
+const findById = rescue(async(req, res) => {
+  const { id } = req.params;
+  
+  const getaSalesById = await service.findById(id);
+  if (getaSalesById.err) return res.status(HTTP_NOT_FOUND_STATUS)
+    .json(getaSalesById);
 
-//   // console.log(getProductsById);
-//   return res.status(HTTP_OK_STATUS).json(getProductsById);
-// });
+  // console.log(getProductsById);
+  return res.status(HTTP_OK_STATUS).json(getaSalesById);
+});
 
 
-// const updateById = rescue(async(req, res) => {
-//   const { id } = req.params;
-//   const { name, quantity } = req.body;
+const updateById = rescue(async(req, res) => {
+  const { id } = req.params;
+  const { productId, quantity } = req.body;
 
-//   const updateProduct = await service.updateById(id, name, quantity);
-//   if (updateProduct.err) return res.status(HTTP_NO_BODY_STATUS)
-//     .json(updateProduct);
+  const updateSale = await service.updateById(id, productId, quantity);
+  if (updateSale.err) return res.status(HTTP_NO_BODY_STATUS)
+    .json(updateSale);
 
-//   console.log(updateProduct);
-//   return res.status(HTTP_OK_STATUS).json(updateProduct);
-// });
+  console.log(updateSale);
+  return res.status(HTTP_OK_STATUS).json(updateSale);
+});
 
 
 // const deleteById = rescue(async(req, res) => {
@@ -59,16 +65,12 @@ const createController = rescue(async (req, res) => {
 // });
 
 
-// const getAll = rescue(async(_req, res) => {
-//   const getAllProducts = await service.getAll();
-//   return res.status(HTTP_OK_STATUS).json({products: getAllProducts});
-// });
 
 module.exports = {
   createController,
-  // updateById,
-  // getAll,
-  // findById,
+  getAll,
+  findById,
+  updateById,
   // deleteById
 };
 

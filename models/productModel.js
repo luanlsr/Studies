@@ -35,8 +35,7 @@ const findByName = async (name) => {
   return connection()
     .then((db) => db.collection('products').findOne({
       name,
-    })
-      .then((result) => (result)));
+    }));
 };
 
 const updateById = async (id, name, quantity) => {

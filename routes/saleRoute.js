@@ -5,19 +5,19 @@ const router = express.Router();
 
 const {
   createController,
-  // getAll,
-  // findById,
-  // updateById,
+  getAll,
+  findById,
+  updateById,
   // deleteById
 } = require('../controllers/saleController');
 
 router.post('/', createController);
 
-// router.get('/', getAll);
+router.get('/', getAll);
 
-// router.get('/:id', findById);
+router.get('/:id', findById);
 
-// router.put('/:id', updateById);
+router.put('/:id', updateById);
 
 // router.delete('/:id', deleteById);
 

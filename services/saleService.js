@@ -5,14 +5,13 @@ const salesModel = require('../models/saleModel');
 const {
   HTTP_NO_BODY_STATUS,
   HTTP_CREATED_STATUS,
-  // isString,
   isNumber,
   isLengthLetterThan,
-  isLengthMoreThan,
-  isLengthEqualsTo
+  isLessThan,
+  isEqualsTo
 } = require('../helpers/helpers');
 
-const five = 5;
+
 const zero = 0;
 const code = 'invalid_data';
 const message = 'Wrong product ID or invalid quantity';
@@ -23,77 +22,52 @@ const returned  = {
   }
 };
 
-const create = async (productId,quantity) => {
+const create = async (itensSold) => {
 
-  switch (true) {
+  const [ {quantity} ] = itensSold;
 
-  case isLengthMoreThan(quantity, zero): return returned;
+  if (isLessThan(quantity, zero)) return returned;
 
-  case isLengthEqualsTo(quantity, zero): return returned;
+  if (isEqualsTo(quantity, zero)) return returned;
+    
+  if (isNumber(quantity)) return returned;
+  
+  const saleService = await salesModel.create(itensSold);
 
-  case isNumber(quantity): return returned;
-
-  default: {}
-  }
-
-  const saleService = await salesModel.create(productId, quantity);
   return saleService;
+}; 
+
+
+const getAll = async () => {
+  const getAllSales = await salesModel.getAll();
+  return getAllSales;
 };
 
-// const findById = async (id) => {
-//   const getSalesById = await salesModel.findById(id);
-//   if (getSalesById === null) {
-//     return {
-//       err: {
-//         code: 'invalid_data',
-//         message: 'Wrong id format',
-//       },
-//     };
-//   }
-//   return getSalesById;
-// };
+const findById = async (id) => {
+  const getSalesById = await salesModel.findById(id);
+  if (getSalesById === null) {
+    return {
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    };
+  }
+  return getSalesById;
+};
 
-// const updateById = async (id, name, quantity) => {
-//   const updateSalesById = await salesModel.findById(id, name, quantity);
+const updateById = async (id, productId, quantity) => {
+  const updateSalesById = await salesModel.findById(id, productId, quantity);
   
-//   switch (true) { 
-//   case isString(name): return {
-//     err: {
-//       code: 'invalid_data', 
-//       message: '"name" must be a String'
-//     }
-//   };
-      
-//   case isLengthLetterThan(name, five): return {
-//     err: {
-//       code: 'invalid_data', 
-//       message: '"name" length must be at least 5 characters long'
-//     }
-//   };
+  if (isLessThan(quantity, zero)) return returned;
 
-//   case isNumber(quantity): return {
-//     err: {
-//       code: 'invalid_data', 
-//       message: '"quantity" must be a number'
-//     }
-//   };
+  if (isEqualsTo(quantity, zero)) return returned;
+    
+  if (isNumber(quantity)) return returned;
 
-//   case isLengthMoreThan(quantity, one): return {
-//     err: {
-//       code: 'invalid_data', 
-//       message: '"quantity" must be larger than or equal to 1'
-//     }
-//   };
+  return updateSalesById;
+};
 
-//   default: {}
-//   }
-//   return updateSalesById;
-// };
-
-// const getAll = async () => {
-//   const getAllSales = await salesModel.getAll();
-//   return getAllSales;
-// };
 
 // const deleteById = async (id) => {
 //   const deleteSale = await salesModel.deleteById(id);
@@ -111,8 +85,9 @@ const create = async (productId,quantity) => {
 
 module.exports = {
   create,
-  // updateById,
-  // getAll,
-  // findById,
+  getAll,
+  findById,
+  updateById,
   // deleteById
 };
+
